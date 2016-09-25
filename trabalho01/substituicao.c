@@ -11,6 +11,15 @@
 #define ALPHABET "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #define N 26
 
+int mod(int a, int b) {
+    if(a >= 0) {
+        return a % b;
+    }
+    else {
+        return a + b * ((b - a - 1)/b);
+    }
+}
+
 // Pega indice em relação ao afabeto
 int get_char_index(char c) {
 	int i;
@@ -28,7 +37,7 @@ char* read_text(){
 	char* text_aux = (char*)malloc(STRING_LENGHT * sizeof(char));
 	int exit = FALSE;
 
-	printf("Digite o texto\n");
+	printf("Digite o texto: \n");
 	do {
 		setbuf(stdin, NULL);
 		scanf("%[^\n]s", text_aux);
@@ -84,7 +93,7 @@ void encrypt(char* text, int key) {
 	for(i = 0; text[i] != '\0'; i++) {
 		int index = get_char_index(text[i]);
 		if(index != -1) {
-			int index_sub = (index + key) % N;
+			int index_sub = mod(index + key, N);
 			text[i] = ALPHABET[index_sub];
 			key = index_sub + key + 1;			
 		}							
@@ -97,15 +106,15 @@ void decrypting(char* text, int key) {
 	for(i = 0; text[i] != '\0'; i++) {
 		int index = get_char_index(text[i]);
 		if(index != -1) {
-			int index_sub = (index - key) % N;
+			int index_sub = mod(index - key, N);
 			text[i] = ALPHABET[index_sub];
-			key = index + key + 1;			
+			key = index + key + 1;		
+
 		}							
 	}
 }
 
 int main() {
-	int i;
 	
 	char choice = read_choice();
 	int key = read_key();
