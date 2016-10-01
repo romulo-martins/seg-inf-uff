@@ -10,12 +10,13 @@
 #define ALPHABET "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #define N 26
 
+// função para tratar o mod, já que o '%' retorna numeros negativos
 int mod(int a, int b) {
     if(a >= 0) {
         return a % b;
     }
     else {
-        return a + b * ((b - a - 1)/b);
+        return a + b*((b - a - 1)/b);
     }
 }
 
@@ -61,11 +62,13 @@ char* read_text(){
 	return text;
 }
 
-// Condição para verificar se 
+// Condição para verificar se a opção é válida
 int choice_condition(char choice) {
 	return choice == 'E' || choice == 'e' || choice == 'D' || choice == 'd';
 }
 
+// Função que lê a opção de encriptar ou decriptar, 
+//caso entre com uma opção inválida pede novamente para entrar com a opção
 char read_choice() {
 	char choice;
 	do {
@@ -80,7 +83,7 @@ char read_choice() {
 	return choice;
 }
 
-// Le a chave
+// Lâ a chave, caso seja um numero negativo pede para digitar uma chave valida
 int read_key() {
 	int key;
 	do {
@@ -124,9 +127,9 @@ void decrypting(char* text, int key) {
 
 int main() {
 	
-	char choice = read_choice();
-	int key = read_key();
-	char* text = read_text();
+	char choice = read_choice(); // le a opção de encriptar ou desencriptar
+	int key = read_key(); //le a chave 
+	char* text = read_text(); // le o texto até entrar com o caractere #
 
 	if(choice == 'E' || choice == 'e') {
 		//Função que encripta(ou cifra) o texto
