@@ -1,6 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h> 
 
+// função para tratar o mod, já que o '%' retorna numeros negativos
+int mod(int a, int b) {
+    if(a >= 0) {
+        return a % b;
+    }
+    else {
+        return a + b*((b - a - 1)/b);
+    }
+}
+
 // verifica se o número é primo
 int is_prime(int n) {
 	int i;
@@ -10,31 +20,39 @@ int is_prime(int n) {
 	return 1;
 }
 
-int mult_inverse(int n) {
-	
-}
+// encontra o primeiro fator primo p, já que n = p*q, 
+// podemos descobrir q fazendo q = n/p
+int find_first_factor(int n) {
+	if(n % 2 == 0) return 2;
 
-
-// fatora n, para descobrir quais primos p e q são n = p*q
-void factoring(int n) {
 	int i;
-	int p, q;
+	// o laço percorre apenas números impares
 	for (i = 3; i < n; i += 2) {
 		if(is_prime(i) && (n % i == 0)) {
-			p = i;
-			q = n / i;
-			break;
+			return i;
 		}
 	}
-	printf("p = %d, q = %d, n = %d\n", p, q, p*q);
+	return n; // não é possivel fatorar, ou seja o número é primo
 }
 
 int main() {
 
-	int n;
+	int n, e, c;
+	scanf("%d %d %d", &n, &e, &c);
 
-	printf("Informe um número: \n");
-	scanf("%d", &n);
+	int p = find_first_factor(n);
+	int q = n/p;
 
-	factoring(n);
+	int d = mod(1/e, (p-1)*(q-1));
+
+	if(is_prime(q)) {
+		printf("p = %d, q = %d, n = %d\n", p, q, p*q);
+		printf("d = %d\n", d);
+	}
+	else {
+		printf("ERRO: %d não é primo!\n", q);
+	}
+
+	printf("FIM!\n");
+
 }
