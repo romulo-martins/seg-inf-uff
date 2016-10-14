@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define STRING_LENGHT 100
-#define MAX_STRING_LENGHT 1000
+#define STRING_LENGHT 10000000
 
 #define TRUE 1
 #define FALSE 0
@@ -32,9 +31,18 @@ int get_char_index(char c) {
 	return -1;
 }
 
+// concatena atéo final da string auxiliar ou entrada do caractere #
+void string_append(char* text, char* text_aux) {
+	int end_text = strlen(text);
+	int i;
+	for(i = 0; text_aux[i] != '#' && text_aux[i] != '\0'; i++) {
+		text[end_text + i] = text_aux[i];
+	}
+}
+
 // Ler linha dados do teclado até receber o caractere #
 char* read_text(){
-	char* text = (char*)malloc(MAX_STRING_LENGHT * sizeof(char));
+	char* text = (char*)malloc(STRING_LENGHT * sizeof(char));
 	char* text_aux = (char*)malloc(STRING_LENGHT * sizeof(char));
 	int exit = FALSE;
 
@@ -46,7 +54,7 @@ char* read_text(){
 			exit = TRUE;
 		}
 		strcat(text, "\n");
-		strcat(text, text_aux);
+		string_append(text, text_aux);
 	} while(!exit);	
 
 	free(text_aux);
