@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h> 
+#include <math.h>
 
 // função para tratar o mod, já que o '%' retorna numeros negativos
 int mod(int a, int b) {
@@ -9,6 +10,32 @@ int mod(int a, int b) {
     else {
         return a + b*((b - a - 1)/b);
     }
+}
+
+// algoritmo de euclides extendido para achar o inverso multiplicativo
+int inverse_mult(int a, int b) {
+	int r = a;
+	int r1 = b;
+	int u = 1;
+	int v = 0;
+	int u1 = 0;
+	int v1 = 1;
+        // variáveis auxiliares para efetuar trocas
+	int rs, us, vs, q;
+
+	while (r1 != 0){
+		q = r / r1; // pega apenas a parte inteira
+		rs = r;
+		us = u;
+		vs = v;
+		r = r1;
+		u = u1;
+		v = v1;
+		r1 = rs - q*r1;
+		u1 = us - q*u;
+		v1 = vs - q*v1;
+	}
+	return r*u + v*b;
 }
 
 // verifica se o número é primo
@@ -43,15 +70,20 @@ int main() {
 	int p = find_first_factor(n);
 	int q = n/p;
 
-	int d = mod(1/e, (p-1)*(q-1));
+	int d = inverse_mult(e, (p-1)*(q-1));
 
-	if(is_prime(q)) {
-		printf("p = %d, q = %d, n = %d\n", p, q, p*q);
-		printf("d = %d\n", d);
-	}
-	else {
-		printf("ERRO: %d não é primo!\n", q);
-	}
+	int temp = pow(c, d);
+	int m = mod(temp, n);
+
+	printf("%d\n", m);
+
+	// if(is_prime(q)) {
+	// 	printf("p = %d, q = %d, n = %d\n", p, q, p*q);
+	// 	printf("d = %d\n", d);
+	// }
+	// else {
+	// 	printf("ERRO: %d não é primo!\n", q);
+	// }
 
 	printf("FIM!\n");
 

@@ -13,31 +13,28 @@ int mod(int a, int b) {
 
 // algoritmo de euclides extendido para achar o inverso multiplicativo
 int inverse_mult(int a, int b) {
+	int r = a;
+	int r1 = b;
 	int u = 1;
 	int v = 0;
-	int v_2 = 1;
-	int u_2 = 0;
+	int u1 = 0;
+	int v1 = 1;
+        // variáveis auxiliares para efetuar trocas
+	int rs, us, vs, q;
 
-	int A = a;
-	int B = b;
-	while (mod(A, B) != 0) {
-		int q = A/B;
-		int r = mod(A, B);
-		A = b;
-		B = r;
-		int u_1 = u;
-		u = u_2;
-		u_2 = u_1 - q*u;
-		int v_1 = v;
-		v = v_2;
-		v_2 = v_2 - q*v;
+	while (r1 != 0){
+		q = r / r1; // pega apenas a parte inteira
+		rs = r;
+		us = u;
+		vs = v;
+		r = r1;
+		u = u1;
+		v = v1;
+		r1 = rs - q*r1;
+		u1 = us - q*u;
+		v1 = vs - q*v1;
 	}
-
-	printf("a = %d, b = %d\n", a, b);
-	printf("u = %d, v = %d\n", u, v);
-	printf("a*u + v*b = %d\n", a*v + u*b);
-
-	return u;
+	return r*u + v*b;
 }
 
 int main() {
