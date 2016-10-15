@@ -3,7 +3,7 @@
 #include <math.h>
 
 // função para tratar o mod, já que o '%' retorna numeros negativos
-int mod(int a, int b) {
+long mod(long a, long b) {
     if(a >= 0) {
         return a % b;
     }
@@ -12,16 +12,32 @@ int mod(int a, int b) {
     }
 }
 
+// algoritmo para executar k = (g^a)mod(n) de forma eficiente
+long mod_exp(long g, long a, long n) {
+  long result, pot;
+
+  pot = g % n;
+  result = 1;
+
+  for( ; a > 0; a /= 2) {
+    if (a % 2 == 1)  // O bit menos significativo e 1
+      result = (result * pot) % n;
+
+    pot = (pot * pot) % n;
+  }
+  return result;
+}
+
 // algoritmo de euclides extendido para achar o inverso multiplicativo
-int inverse_mult(int a, int b) {
-	int r = a;
-	int r1 = b;
-	int u = 1;
-	int v = 0;
-	int u1 = 0;
-	int v1 = 1;
+long inverse_mult(long a, long b) {
+	long r = a;
+	long r1 = b;
+	long u = 1;
+	long v = 0;
+	long u1 = 0;
+	long v1 = 1;
         // variáveis auxiliares para efetuar trocas
-	int rs, us, vs, q;
+	long rs, us, vs, q;
 
 	while (r1 != 0){
 		q = r / r1; // pega apenas a parte inteira
@@ -39,8 +55,8 @@ int inverse_mult(int a, int b) {
 }
 
 // verifica se o número é primo
-int is_prime(int n) {
-	int i;
+long is_prime(long n) {
+	long i;
 	for(i = 2; i < n; i++) {
 		if(n % i == 0) return 0;
 	}
@@ -49,10 +65,10 @@ int is_prime(int n) {
 
 // encontra o primeiro fator primo p, já que n = p*q, 
 // podemos descobrir q fazendo q = n/p
-int find_first_factor(int n) {
+long find_first_factor(long n) {
 	if(n % 2 == 0) return 2;
 
-	int i;
+	long i;
 	// o laço percorre apenas números impares
 	for (i = 3; i < n; i += 2) {
 		if(is_prime(i) && (n % i == 0)) {
@@ -64,26 +80,16 @@ int find_first_factor(int n) {
 
 int main() {
 
-	int n, e, c;
-	scanf("%d %d %d", &n, &e, &c);
+	long n, e, c;
+	scanf("%li %li %li", &n, &e, &c);
 
-	int p = find_first_factor(n);
-	int q = n/p;
+	long p = find_first_factor(n);
+	long q = n/p;
 
-	int d = inverse_mult(e, (p-1)*(q-1));
+	long d = inverse_mult(e, (p-1)*(q-1));
+	long m = mod_exp(c, d, n);
 
-	int temp = pow(c, d);
-	int m = mod(temp, n);
-
-	printf("%d\n", m);
-
-	// if(is_prime(q)) {
-	// 	printf("p = %d, q = %d, n = %d\n", p, q, p*q);
-	// 	printf("d = %d\n", d);
-	// }
-	// else {
-	// 	printf("ERRO: %d não é primo!\n", q);
-	// }
+	printf("%li\n", m);
 
 	printf("FIM!\n");
 
