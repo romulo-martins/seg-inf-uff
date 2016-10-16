@@ -13,45 +13,40 @@ long mod(long a, long b) {
 }
 
 // algoritmo para executar k = (g^a)mod(n) de forma eficiente
-long mod_exp(long g, long a, long n) {
-  long result, pot;
+long mod_exp(long g, unsigned long a, long n) {
+  long long pow = g % n;
+  long long result = 1;
 
-  pot = g % n;
-  result = 1;
-
-  for( ; a > 0; a /= 2) {
+  for ( ; a > 0; a /= 2) {
     if (a % 2 == 1)  // O bit menos significativo e 1
-      result = (result * pot) % n;
+      result = (result * pow) % n;
 
-    pot = (pot * pot) % n;
+    pow = (pow * pow) % n;
   }
   return result;
 }
 
 // algoritmo de euclides extendido para achar o inverso multiplicativo
-long inverse_mult(long a, long b) {
-	long r = a;
-	long r1 = b;
-	long u = 1;
-	long v = 0;
-	long u1 = 0;
-	long v1 = 1;
-        // variáveis auxiliares para efetuar trocas
-	long rs, us, vs, q;
-
-	while (r1 != 0){
-		q = r / r1; // pega apenas a parte inteira
-		rs = r;
-		us = u;
-		vs = v;
-		r = r1;
-		u = u1;
-		v = v1;
-		r1 = rs - q*r1;
-		u1 = us - q*u;
-		v1 = vs - q*v1;
-	}
-	return r*u + v*b;
+long mod_inverse(long a, long m) {
+    long m0 = m, t, q;
+    long x0 = 0, x1 = 1;
+ 
+    if (m == 1)
+      return 0;
+ 
+    while (a > 1) {
+        q = a / m;
+        t = m;
+        m = a % m, a = t;
+        t = x0;
+        x0 = x1 - q * x0;
+        x1 = t;
+    }
+ 
+    if (x1 < 0)
+       x1 += m0;
+ 
+    return x1;
 }
 
 // verifica se o número é primo
@@ -86,11 +81,9 @@ int main() {
 	long p = find_first_factor(n);
 	long q = n/p;
 
-	long d = inverse_mult(e, (p-1)*(q-1));
+	long d = mod_inverse(e, (p-1)*(q-1));
 	long m = mod_exp(c, d, n);
 
 	printf("%li\n", m);
-
-	printf("FIM!\n");
 
 }
