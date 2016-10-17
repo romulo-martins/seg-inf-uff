@@ -18,21 +18,20 @@ long mod_exp(long g, unsigned long a, long n) {
   long long result = 1;
 
   for ( ; a > 0; a /= 2) {
-    if (a % 2 == 1)  // O bit menos significativo e 1
+    if (a % 2 == 1) {  // O bit menos significativo e 1
       result = (result * pow) % n;
-
+  	}
     pow = (pow * pow) % n;
   }
   return result;
 }
 
-// algoritmo de euclides extendido para achar o inverso multiplicativo
+// algoritmo de euclides extendido para achar o inverso multiplicativo (a^(-1))mod(m)
 long mod_inverse(long a, long m) {
     long m0 = m, t, q;
     long x0 = 0, x1 = 1;
  
-    if (m == 1)
-      return 0;
+    if (m == 1) return 0;
  
     while (a > 1) {
         q = a / m;
@@ -43,16 +42,21 @@ long mod_inverse(long a, long m) {
         x1 = t;
     }
  
-    if (x1 < 0)
-       x1 += m0;
+    if (x1 < 0) x1 += m0;
  
     return x1;
 }
 
-// verifica se o número é primo
-long is_prime(long n) {
+// verifica se o número é primo.
+// neste caso evitamos os números pares e vamos até raiz de n.
+// 	visto que, se d é maior que a raiz de n e d é um
+//	divisor de n, então n/d é menor que raiz de n e é também divisor de n; 
+//	por consequência, se n tem um divisor, encontraremos no instante em que chegar a raiz de n
+int is_prime(long n) {
+	if(n % 2 == 0) return 0; 
+
 	long i;
-	for(i = 2; i < n; i++) {
+	for(i = 3; i < sqrt(n) + 1; i += 2) { 
 		if(n % i == 0) return 0;
 	}
 	return 1;
@@ -70,7 +74,7 @@ long find_first_factor(long n) {
 			return i;
 		}
 	}
-	return n; // não é possivel fatorar, ou seja o número é primo
+	return n; // não é possivel fatorar, ou seja o número n é primo
 }
 
 int main() {
