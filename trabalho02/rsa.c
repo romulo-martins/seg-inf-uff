@@ -56,7 +56,7 @@ int is_prime(long n) {
 	if(n % 2 == 0) return 0; 
 
 	long i;
-	for(i = 3; i < sqrt(n) + 1; i += 2) { 
+	for(i = 3; i < (long)(sqrt(n)+1); i += 2) { 
 		if(n % i == 0) return 0;
 	}
 	return 1;
