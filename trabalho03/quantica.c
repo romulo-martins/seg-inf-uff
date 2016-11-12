@@ -50,8 +50,6 @@ void print_bits(int* b, int bits_size) {
 int* generate_bits(int n) {
 	int* bits = (int*)malloc(sizeof(int)*n);
 	
-	srand(time(NULL));
-
 	int i;
 	for (i = 0; i < n; i++)	{
 		bits[i] = rand() % 2;
@@ -62,8 +60,6 @@ int* generate_bits(int n) {
 
 char* generate_base(char b1, char b2, int n) {
 	char* base = (char*)malloc(sizeof(char)*n);
-	
-	srand(time(NULL));
 
 	int i;
 	for (i = 0; i < n; i++)	{
@@ -83,15 +79,17 @@ char* generate_base(char b1, char b2, int n) {
 int main() {
 
 	int s, n;
-	scanf("%d %d", &s, &n);
+	scanf("%d %d\n", &s, &n);
 
-	char b1 = '+', b2 = 'x'; // bases a serem escolhidas	
-	//scanf("%c %c", &b1, &b2);
+	char b[2]; // bases a serem escolhidas	
+	scanf("%c %c", &b[0], &b[1]);
 
-	printf("%c %c\n", b1, b2);
-
+	printf("%c %c\n", b[0], b[1]);
+	
+	srand((unsigned)s);
 	int* bits = generate_bits(n);
-	char* chosen_base = generate_base(b1, b2, n);
+	srand((unsigned)s);
+	char* chosen_base = generate_base(b[0], b[1], n);
 
 	print_bits(bits, n);
 	print_base(chosen_base, n);
@@ -105,3 +103,5 @@ int main() {
 
 	return 0;
 }
+
+
