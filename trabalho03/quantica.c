@@ -47,6 +47,17 @@ int* create_integer_array(int size) {
 	return (int*)malloc(sizeof(int)*size);
 } 
 
+char* read_base(int n) {
+	char* base_to_read = create_char_array(n);
+	int i;
+	for (i = 0; i < n-1; ++i) {
+		scanf("%c ", &base_to_read[i]);
+	}
+	scanf("%c", &base_to_read[i]);
+	
+	return base_to_read;
+}
+
 char* polarize(int* bits, char* chosen_base, int bits_size) {
 	char* p = (char*)malloc(sizeof(char)*bits_size);
 
@@ -113,10 +124,10 @@ char* generate_base(char* b, int n) {
 	for (i = 0; i < n; i++)	{
 		int random_index = rand() % 2;
 		if(random_index) {
-			base[i] = b[0];
-		}
-		else {
 			base[i] = b[1];
+		}
+		else {			
+			base[i] = b[0];
 		}		
 	}
 
@@ -126,12 +137,12 @@ char* generate_base(char* b, int n) {
 int main() {
 
 	int s, n;
-	scanf("%d %d\n", &s, &n);
-	// s = 0, n = 8; // inicialização para teste
+	// scanf("%d %d\n", &s, &n);
+	s = 0, n = 8; // inicialização para teste
 
 	char b[2]; // bases a serem escolhidas	
-	scanf("%c %c", &b[0], &b[1]);	
-	// b[0] = '+', b[1] = 'x'; // inicialização para teste
+	// scanf("%c %c", &b[0], &b[1]);	
+	b[0] = '+', b[1] = 'x'; // inicialização para teste
 
 	srand(s);
 	
@@ -143,16 +154,13 @@ int main() {
 	// char alice_base[] = {'+', 'x', '+', '+', '+', '+', '+', '+'};		
 	print_base(alice_base, n);
 
-	// printf("%d %d\n", s, n);
-	// printf("%c %c\n", b[0], b[1]);
-
 	char* polarized = polarize(bits, alice_base, n);
 	print_base(polarized, n);
-
-	char bob_base[] = { '+', 'x', 'x', 'x', '+', 'x', '+', '+' };
+	
+	char bob_base[] = {'+', 'x', 'x', 'x', '+', 'x', '+', '+'};
+	// char* bob_base = read_base(n); 
 
 	int* result = compare_bases(polarized, alice_base, bob_base, n);
-
 	long long final_result = binary_to_decimal(result, n);
 
 	printf("%lli\n", final_result);
@@ -164,5 +172,3 @@ int main() {
 
 	return 0;
 }
-
-
