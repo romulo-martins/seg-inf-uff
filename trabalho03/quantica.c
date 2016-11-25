@@ -59,8 +59,9 @@ char* read_base(int n) {
 	return base_to_read;
 }
 
+// realiza a polarização
 char* polarize(int* bits, char* chosen_base, int bits_size) {
-	char* p = (char*)malloc(sizeof(char)*bits_size);
+	char* p = create_char_array(bits_size);
 
 	int i;
 	for (i = 0; i < bits_size; i++)	{
@@ -72,6 +73,18 @@ char* polarize(int* bits, char* chosen_base, int bits_size) {
 	return p;
 }
 
+// a partir de uma polarização descobre sua base
+char* polarize_to_base(char* polarized, char* chosen_base, int n) {
+	char* temp = create_char_array(n);	
+
+	int i;
+	for (i = 0; i < n; i++)	{
+		temp[i] = chosen_base[get_element_index(polarized[i])];
+	}
+	return temp;
+}
+
+// compara as bases e retorna os bits do resultado final em binário, atribui -1 aos bits jogados fora (ou seja, não estão nas mesmas bases)
 int* compare_bases(char* polarized, char* a_base, char* b_base, int n) {
 	int* r_base = create_integer_array(n);
 	int i;
@@ -86,6 +99,7 @@ int* compare_bases(char* polarized, char* a_base, char* b_base, int n) {
 	return r_base;
 }
 
+// gera um array de bits binários aleatóriamente 
 int* generate_bits(int n) {
 	int* bits = create_integer_array(n);
 
@@ -97,6 +111,7 @@ int* generate_bits(int n) {
 	return bits;
 }
 
+// passa de um array de bits binários para a base em relação ao vetor de bases
 char* bits_to_base(int* bits, char* chosen_base, int n) {
 	char* base_temp = create_char_array(n);
 
@@ -187,6 +202,28 @@ void execute_test2() {
 	free(result);
 }
 
+void execute_test3() {
+	int s, n;
+	s = 42, n = 100; // inicialização para teste
+
+	char b[2]; // bases a serem escolhidas	
+	b[0] = '+', b[1] = 'o'; // inicialização para teste
+
+	char* polarized = read_base(n);
+	print_base(polarized, n);
+
+	char* alice_base = polarize_to_base(polarized, b, n);		
+	char* bob_base = read_base(n);
+
+	int* result = compare_bases(polarized, alice_base, bob_base, n);
+	long long final_result = binary_to_decimal(result, n);
+
+	printf("%lli\n", final_result);
+
+	free(alice_base);
+	free(result);
+}
+
 void execute_program() {
 	int s, n;
 	scanf("%d %d\n", &s, &n);
@@ -221,8 +258,9 @@ void execute_program() {
 
 
 int main() {
-	execute_test1();
+	// execute_test1();
 	// execute_test2();
+	execute_test3();
 	// execute_program();	
 
 	return 0;
