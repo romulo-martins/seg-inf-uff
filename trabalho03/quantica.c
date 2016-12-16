@@ -17,6 +17,7 @@ int* create_integer_array(int size) {
 	return (int*)malloc(sizeof(int)*size);
 } 
 
+// converte de binário para decimal
 long long binary_to_decimal(int* bits, int bits_length) {
 	int i;
 	long long decimal_value = 0;
@@ -48,6 +49,7 @@ int get_element_index(char c) {
 	}
 }
 
+// lê a base do teclado do usuário
 char* read_base(int n) {
 	char* base_to_read = create_char_array(n);
 	int i;
@@ -123,6 +125,7 @@ char* bits_to_base(int* bits, char* chosen_base, int n) {
 	return base_temp;	
 }
 
+// exibe a base no console
 void print_base(char* c, int bits_size) {
 	int i;
 	for (i = 0; i < bits_size; i++)	{
@@ -131,6 +134,7 @@ void print_base(char* c, int bits_size) {
 	printf("\n");
 }
 
+// exibe o array de bits no console
 void print_bits(int* b, int bits_size) {
 	int i;
 	for (i = 0; i < bits_size; i++)	{
@@ -144,6 +148,7 @@ void print_bits(int* b, int bits_size) {
 	printf("\n");
 }
 
+// primeiro teste da descrição da professora
 void execute_test1() {
 	int s, n;
 	s = 0, n = 8; // inicialização para teste
@@ -160,8 +165,7 @@ void execute_test1() {
 	char* polarized = polarize(bits, alice_base, n);
 	print_base(polarized, n);
 	
-	// char bob_base[] = {'+', 'x', 'x', 'x', '+', 'x', '+', '+'};
-	char* bob_base = read_base(n);
+	char bob_base[] = {'+', 'x', 'x', 'x', '+', 'x', '+', '+'};
 
 	int* result = compare_bases(polarized, alice_base, bob_base, n);
 	long long final_result = binary_to_decimal(result, n);
@@ -173,6 +177,7 @@ void execute_test1() {
 	free(result);	
 }
 
+// segundo teste da descrição do problema, no site da professora
 void execute_test2() {
 	int s, n;
 	s = 0, n = 8; // inicialização para teste
@@ -189,8 +194,7 @@ void execute_test2() {
 	char* polarized = polarize(bits, alice_base, n);
 	print_base(polarized, n);
 		
-	// char bob_base[] = {'x', 'o', 'o', 'o', 'x', 'o', 'x', 'x'};
-	char* bob_base = read_base(n);
+	char bob_base[] = {'x', 'o', 'o', 'o', 'x', 'o', 'x', 'x'};
 
 	int* result = compare_bases(polarized, alice_base, bob_base, n);
 	long long final_result = binary_to_decimal(result, n);
@@ -202,28 +206,7 @@ void execute_test2() {
 	free(result);
 }
 
-void execute_test3() {
-	int s, n;
-	s = 42, n = 100; // inicialização para teste
-
-	char b[2]; // bases a serem escolhidas	
-	b[0] = '+', b[1] = 'o'; // inicialização para teste
-
-	char* polarized = read_base(n);
-	print_base(polarized, n);
-
-	char* alice_base = polarize_to_base(polarized, b, n);		
-	char* bob_base = read_base(n);
-
-	int* result = compare_bases(polarized, alice_base, bob_base, n);
-	long long final_result = binary_to_decimal(result, n);
-
-	printf("%lli\n", final_result);
-
-	free(alice_base);
-	free(result);
-}
-
+// execução principal do programa
 void execute_program() {
 	int s, n;
 	scanf("%d %d\n", &s, &n);
@@ -242,7 +225,7 @@ void execute_program() {
 	char* polarized = polarize(bits, alice_base, n);
 	print_base(polarized, n);
 	
-	char* bob_base = read_base(n); 
+	char* bob_base = read_base(n); // le os dados a base informada pelo usuário
 
 	int* result = compare_bases(polarized, alice_base, bob_base, n);
 	long long final_result = binary_to_decimal(result, n);
@@ -260,8 +243,7 @@ void execute_program() {
 int main() {
 	// execute_test1();
 	// execute_test2();
-	execute_test3();
-	// execute_program();	
+	execute_program();	
 
 	return 0;
 }
