@@ -69,13 +69,20 @@ int are_equals(int* p1, int* p2, int k) {
 
 // realiza a análise de colisoes que ocorreram
 void collision_analisys(int** p_mat, int d, int k) {
-	int i, j, sum = 0; 
+	int i, j, colisions = 0, sum = 0;
+
+	int visit[d]; // flag para marcar visitados
+	for(i = 0; i < d; i++) visit[i] = 0;
+	 
 	for(i = 0; i < d-1; i++) {
+		colisions = 0;
 		for(j = i+1; j < d; j++) {
-			if(are_equals(p_mat[i], p_mat[j], k)) {
-				sum++;	
+			if(!visit[j] && are_equals(p_mat[i], p_mat[j], k)) {
+				colisions++;
+				visit[j] = 1;	
 			} 
 		}
+		if(colisions > 0) sum += (colisions + 1); // acrescenta 1 pra contar com o proprio 
 	}
 	float percent = ((float) sum / d)*100;
 
@@ -151,6 +158,6 @@ int main() {
 	collision_analisys(p_mat, d, k); // REFATORAR, AINDA COM PROBLEMA
 
 	free(bits);
-	free_matrix(p_mat, d);
+	// free_matrix(p_mat, d);
 }
 
