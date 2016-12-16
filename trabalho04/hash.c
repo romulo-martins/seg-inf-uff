@@ -2,8 +2,19 @@
 #include <stdlib.h>
 #include <math.h>
 
-// função devolve um array com os bits de paridade
-// k não deveria ser passado como parametro mas para facilitar vou fazer isso
+// interface
+int* hamming_code(int* bits, int n, int k);
+void print_bits(int* bits, int n);
+void read_bits(int* bits, int n);
+int** create_matrix(int lin, int row);
+void free_matrix(int** mat, int lin, int row);
+void collision_analisys(int** p_mat, int lin, int row);
+
+
+// função devolve um array com os bits de paridade.
+// k não deveria ser passado como parametro mas para facilitar fiz isto.
+// o correto seria a função hamming code retornar o array "b" que é a 
+// concatenação da paridade com os bits
 int* hamming_code(int* bits, int n, int k) {
 	int i, j, t, sum, jump;
 
@@ -24,7 +35,8 @@ int* hamming_code(int* bits, int n, int k) {
 	j = 0;
 	for (i = 0; i < b_size; i++) {
 		if(b[i] != -1) {
-			b[i] = bits[j++];
+			b[i] = bits[j];
+			j++;
 		}
 	}
 	
@@ -42,9 +54,35 @@ int* hamming_code(int* bits, int n, int k) {
 	}
 	free(b);
 
+	// retorna os bits de paridade
 	return p;
 }
 
+// verifica se dois arrays de paridade são iguais
+int are_equals(int* p1, int* p2, int k) {
+	int i;
+	for(i = 0; i < k; i++) {
+		if(p1[i] != p2[i]) return 0;
+	}
+	return 1;
+}
+
+// realiza a análise de colisoes que ocorreram
+void collision_analisys(int** p_mat, int d, int k) {
+	int i, j, sum = 0; 
+	for(i = 0; i < d-1; i++) {
+		for(j = i+1; j < d; j++) {
+			if(are_equals(p_mat[i], p_mat[j], k)) {
+				sum++;	
+			} 
+		}
+	}
+	float percent = ((float) sum / d)*100;
+
+	printf("O numero de colisoes foi %.2f %%\n", percent);
+}
+
+// exibe na tecla do console os bits
 void print_bits(int* bits, int n) {
 	int i;
 	for (i = 0; i < n; i++) {
@@ -52,6 +90,7 @@ void print_bits(int* bits, int n) {
 	}
 }
 
+// le os bits a partir do console
 void read_bits(int* bits, int n) {
 	int i;
 	for (i = 0; i < n; i++) {
@@ -59,27 +98,59 @@ void read_bits(int* bits, int n) {
 	}
 }
 
+// aloca uma matriz dinamicamente
+int** create_matrix(int lin, int row) {
+	int** mat = (int**)malloc(lin*sizeof(int));
+	int i;
+	for(i = 0; i < lin; i++) {
+		mat[i] = (int*)malloc(row*sizeof(int));
+	}
+	return mat;
+}
+
+// libera a matriz criada dinamicamente
+void free_matrix(int** mat, int lin, int row) {
+	int i;
+	for (i = 0; i < lin; i++) {
+		free(mat[i]);
+	}
+	free(mat);
+}
+
 int main() {
 	
-	int k, d; // k bits de paridade
+	int k, d; // k bits de paridade, e d entradas
 	scanf("%d %d\n", &k, &d);
 
 	int n = pow(2, k) - 1 - k; // onde n é o tamanho dos bits
 
-	// limpa o buffer, não sei pq, mas as vezes tem que se fazer isso para imprimir bonitinho no console 
-	// fflush(stdin); 
+	// limpa o buffer, não sei pq, mas as vezes tem que se fazer isso para exibir bonitinho no console 
+	// fflush(stdin);
 
+	// array de bits a serem lidos no console
 	int* bits = (int*)malloc(n*sizeof(int));
-	read_bits(bits, n);
 
-	int* p = hamming_code(bits, n, k);
+	// matriz de paridades
+	int** p_mat = create_matrix(d, k);
 
-	print_bits(bits, n);
-	printf(" - ");
-	print_bits(p, k);
-	printf("\n");
+	int i, j;
+	// executa d vezes para realizar a análise de colisoes
+	for (i = 0; i < d; ++i) {
+		read_bits(bits, n);
+
+		// recebe o array de bits de paridade que são calculados pela função hamming code
+		p_mat[i] = hamming_code(bits, n, k);
+
+		print_bits(bits, n);
+		printf(" - ");
+		print_bits(p_mat[i], k);
+		printf("\n");
+	}
+
+	// realiza a análise das colisoes
+	collision_analisys(p_mat, d, k);
 
 	free(bits);
-	free(p);
+	// free_matrix(p_mat, d, k);
 }
 
