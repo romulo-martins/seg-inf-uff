@@ -10,7 +10,6 @@ int** create_matrix(int lin, int row);
 void free_matrix(int** mat, int lin);
 void collision_analisys(int** p_mat, int d, int k);
 
-
 // função devolve um array com os bits de paridade.
 // k não deveria ser passado como parametro mas para facilitar fiz isto.
 // o correto seria a função hamming code retornar o array "b" que é a 
@@ -155,9 +154,9 @@ int main() {
 	}
 
 	// realiza a análise das colisoes
-	collision_analisys(p_mat, d, k); // REFATORAR, AINDA COM PROBLEMA
+	collision_analisys(p_mat, d, k);
 
 	free(bits);
-	// free_matrix(p_mat, d);
+	// free_matrix(p_mat, d); // está dando problema
 }
 
