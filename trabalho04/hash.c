@@ -7,8 +7,8 @@ int* hamming_code(int* bits, int n, int k);
 void print_bits(int* bits, int n);
 void read_bits(int* bits, int n);
 int** create_matrix(int lin, int row);
-void free_matrix(int** mat, int lin, int row);
-void collision_analisys(int** p_mat, int lin, int row);
+void free_matrix(int** mat, int lin);
+void collision_analisys(int** p_mat, int d, int k);
 
 
 // função devolve um array com os bits de paridade.
@@ -109,12 +109,12 @@ int** create_matrix(int lin, int row) {
 }
 
 // libera a matriz criada dinamicamente
-void free_matrix(int** mat, int lin, int row) {
+void free_matrix(int** mat, int lin) {
 	int i;
-	for (i = 0; i < lin; i++) {
-		free(mat[i]);
-	}
+	for (i = 0; i < lin; i++) free(mat[i]);
 	free(mat);
+
+	return ;
 }
 
 int main() {
@@ -148,9 +148,9 @@ int main() {
 	}
 
 	// realiza a análise das colisoes
-	collision_analisys(p_mat, d, k);
+	collision_analisys(p_mat, d, k); // REFATORAR, AINDA COM PROBLEMA
 
 	free(bits);
-	// free_matrix(p_mat, d, k);
+	free_matrix(p_mat, d);
 }
 
